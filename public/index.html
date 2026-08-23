@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SourceTether — Lunar Landing</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body data-phase="boot">
+
+<!-- Kept in the render tree at zero size: Blink drops filters inside a
+     display:none subtree and url(#…) stops resolving. Populated by app.js. -->
+<svg class="glass-filters" id="glass-filters" aria-hidden="true"></svg>
+
+<main class="shell">
+
+  <header class="topbar">
+    <span class="brand">SourceTether</span>
+    <span class="sep"></span>
+    <code class="ctx" id="calibration">initialising</code>
+    <div class="topbar-right">
+      <details class="proof">
+        <summary>Technical proof</summary>
+        <div class="proof-body">
+          <dl>
+            <div><dt>anchor</dt><dd><code id="proof-anchor">—</code></dd></div>
+            <div><dt>declaration kind</dt><dd><code id="proof-kind">—</code></dd></div>
+            <div><dt>captured fingerprint</dt><dd><code id="proof-captured">—</code></dd></div>
+            <div><dt>current fingerprint</dt><dd><code id="proof-current">—</code></dd></div>
+            <div><dt>gate</dt><dd><code id="proof-gate">—</code></dd></div>
+            <div><dt>observation</dt><dd><code id="proof-observation">—</code></dd></div>
+          </dl>
+        </div>
+      </details>
+    </div>
+  </header>
+
+  <section class="stage" id="stage">
+    <canvas id="hero" aria-label="Mission stage: the tether between a captured memory and its source declaration, and the lunar descent it governs"></canvas>
+    <div class="stage-veil" aria-hidden="true"></div>
+    <div class="stage-grain" aria-hidden="true"></div>
+
+    <span class="edge edge-l" id="edge-left"></span>
+    <span class="edge edge-r" id="edge-right"></span>
+
+    <div class="memcard" id="memcard" hidden>
+      <span class="mc-label">Memory</span>
+      <code class="mc-id" id="memory-id">—</code>
+      <span class="mc-state" id="memory-state">—</span>
+    </div>
+
+    <div class="sourcecard" id="sourcecard">
+      <div class="sc-head">
+        <span class="sc-label">Source</span>
+        <span class="sc-kind" id="source-kind">—</span>
+      </div>
+      <code class="sc-decl" id="source-declaration">—</code>
+      <code class="sc-path" id="source-path">—</code>
+    </div>
+
+    <div class="narrative" id="narrative" aria-live="polite">
+      <p class="n-kicker" id="narrative-kicker">Retrieval gate</p>
+      <p class="verdict" id="verdict">—</p>
+      <p class="lesson" id="lesson">—</p>
+      <p class="claim" id="claim" hidden></p>
+      <div class="reread" id="reread" hidden>
+        <span class="rr-label">Re-read required</span>
+        <code class="rr-symbol" id="reread-symbol">—</code>
+        <code class="rr-reason" id="reread-reason">—</code>
+      </div>
+    </div>
+
+    <div class="results" id="results" hidden>
+      <div class="result stale">
+        <span class="r-title">Stale memory</span>
+        <span class="r-outcome" id="stale-outcome">—</span>
+        <span class="r-stat" id="stale-stat">—</span>
+      </div>
+      <div class="result good">
+        <span class="r-title">Revalidated source</span>
+        <span class="r-outcome" id="good-outcome">—</span>
+        <span class="r-stat" id="good-stat">—</span>
+      </div>
+    </div>
+  </section>
+
+  <footer class="dock">
+    <label class="obs">Observation
+      <input id="observation" value="10" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="Claude-Mem observation id">
+    </label>
+    <div class="actions">
+      <button id="capture" class="btn" type="button">Capture memory</button>
+      <button id="moon" class="btn" type="button">Migrate to Moon</button>
+      <button id="replay" class="btn" type="button">Run landing replay</button>
+      <button id="reset" class="btn btn-ghost" type="button">Reset</button>
+    </div>
+    <p class="err" id="error" role="alert" hidden></p>
+  </footer>
+
+</main>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>
