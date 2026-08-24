@@ -1095,15 +1095,32 @@ body.in-demo .sitebar { transform: translateY(-100%); opacity: 0; }
   width: min(560px, calc(100vw - 48px));
   text-align: center;
   pointer-events: none;
+  isolation: isolate;
+}
+.mission-entry::before,
+.mission-exit::before {
+  content: ""; position: absolute; z-index: -1;
+  left: 50%; bottom: -18svh; width: min(100vw, 920px); height: 34svh;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 0 0;
+  opacity: 0.7;
+}
+.mission-entry::before {
+  background: radial-gradient(ellipse at 50% 100%, rgba(90,235,212,0.13), transparent 68%);
+}
+.mission-exit::before {
+  background: radial-gradient(ellipse at 50% 100%, rgba(251,191,36,0.12), transparent 68%);
 }
 .mission-entry {
-  transform: translate(-50%, calc(-50% - var(--mission-entry) * 34px));
+  transform: translate(-50%, calc(-50% - var(--mission-entry) * 34px))
+    scale(calc(1 - var(--mission-entry) * 0.018));
   /* Hold the briefing legibly through most of its viewport, then clear the
      pinned frame just before the console's independent entrance begins. */
   opacity: max(0, calc((1 - var(--mission-entry)) * 4));
 }
 .mission-exit {
-  transform: translate(-50%, calc(-50% + (1 - var(--mission-exit)) * 28px));
+  transform: translate(-50%, calc(-50% + (1 - var(--mission-exit)) * 28px))
+    scale(calc(0.982 + var(--mission-exit) * 0.018));
   opacity: var(--mission-exit);
 }
 .mission-entry .kicker,
@@ -1112,10 +1129,15 @@ body.in-demo .sitebar { transform: translateY(-100%); opacity: 0; }
 .mission-exit-title {
   font-size: clamp(38px, 5.6vw, 72px); line-height: 0.98; color: var(--text-0);
 }
-.mission-entry > p:last-child,
-.mission-exit > p:last-child {
+.mission-copy {
   max-width: 38ch; margin-top: 18px;
   font-size: 15px; line-height: 1.6; color: var(--text-2);
+}
+.mission-cue {
+  position: absolute; top: calc(50svh - 56px); left: 0; right: 0;
+  margin: 0;
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em;
+  color: var(--text-3);
 }
 
 @media (prefers-reduced-motion: reduce) {
