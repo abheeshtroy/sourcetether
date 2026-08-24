@@ -215,10 +215,20 @@
   <section class="mission-chapter" id="live-proof" aria-label="Interactive SourceTether mission walkthrough">
     <div class="mission-pin">
       <div class="mission-entry" aria-hidden="true">
-        <p class="kicker">SOURCE TETHER // FLIGHT SYSTEM</p>
-        <p class="display mission-entry-title">Begin descent.</p>
-        <p class="mission-copy">A memory is cleared only while its source still holds.</p>
-        <p class="mission-cue">SCROLL TO INITIALIZE</p>
+        <div class="flight-scene flight-scene-entry">
+          <div class="flight-craft descent-craft">
+            <span class="craft-antenna"></span><span class="craft-window"></span>
+            <span class="craft-body"></span><span class="craft-leg craft-leg-l"></span><span class="craft-leg craft-leg-r"></span>
+            <span class="craft-engine"></span>
+          </div>
+          <div class="flight-copy">
+            <p class="kicker">SOURCE TETHER // FLIGHT SYSTEM</p>
+            <p class="display mission-entry-title">Begin descent.</p>
+            <p class="mission-copy">A memory is cleared only while its source still holds.</p>
+            <div class="descent-beacon"><span></span><span></span><span></span></div>
+            <p class="mission-cue">SCROLL TO INITIALIZE</p>
+          </div>
+        </div>
       </div>
 
       <div class="console">
@@ -312,10 +322,19 @@
       </div>
 
       <div class="mission-exit" aria-hidden="true">
-        <p class="kicker">MISSION COMPLETE</p>
-        <p class="display mission-exit-title">Return with what changed.</p>
-        <p class="mission-copy">The old memory was not called false. It was held until its source could be read again.</p>
-        <p class="mission-cue">CONTINUE TO ROADMAP</p>
+        <div class="flight-scene flight-scene-exit">
+          <div class="flight-craft ascent-craft">
+            <span class="craft-antenna"></span><span class="craft-window"></span>
+            <span class="craft-body"></span><span class="craft-leg craft-leg-l"></span><span class="craft-leg craft-leg-r"></span>
+            <span class="craft-engine"></span>
+          </div>
+          <div class="flight-copy">
+            <p class="kicker">MISSION COMPLETE</p>
+            <p class="display mission-exit-title">Return with what changed.</p>
+            <p class="mission-copy">The old memory was not called false. It was held until its source could be read again.</p>
+            <p class="mission-cue">CONTINUE TO ROADMAP</p>
+          </div>
+        </div>
       </div>
     </div>
   </section>

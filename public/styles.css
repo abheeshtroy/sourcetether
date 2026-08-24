@@ -1032,7 +1032,7 @@ body[data-phase="settled"] .narrative { transform: translateY(0); }
    console, and a full viewport for the handoff back to the editorial page. */
 .mission-chapter {
   position: relative;
-  min-height: 500svh;
+  min-height: 600svh;
   max-width: none;
   background: var(--void);
   color: var(--text-1);
@@ -1112,16 +1112,12 @@ body.in-demo .sitebar { transform: translateY(-100%); opacity: 0; }
   background: radial-gradient(ellipse at 50% 100%, rgba(251,191,36,0.12), transparent 68%);
 }
 .mission-entry {
-  transform: translate(-50%, calc(-50% - var(--mission-entry) * 34px))
-    scale(calc(1 - var(--mission-entry) * 0.018));
-  /* Hold the briefing legibly through most of its viewport, then clear the
-     pinned frame just before the console's independent entrance begins. */
-  opacity: max(0, calc((1 - var(--mission-entry)) * 4));
+  transform: translate(-50%, calc(-50% - var(--mission-entry) * 48px));
+  opacity: max(0, calc((1 - var(--mission-entry)) * 3.8));
 }
 .mission-exit {
-  transform: translate(-50%, calc(-50% + (1 - var(--mission-exit)) * 28px))
-    scale(calc(0.982 + var(--mission-exit) * 0.018));
-  opacity: var(--mission-exit);
+  transform: translate(-50%, calc(-50% + (1 - var(--mission-exit)) * 20px));
+  opacity: min(1, calc(var(--mission-exit) * 3));
 }
 .mission-entry .kicker,
 .mission-exit .kicker { margin-bottom: 16px; }
@@ -1134,15 +1130,45 @@ body.in-demo .sitebar { transform: translateY(-100%); opacity: 0; }
   font-size: 15px; line-height: 1.6; color: var(--text-2);
 }
 .mission-cue {
-  position: absolute; top: calc(50svh - 56px); left: 0; right: 0;
-  margin: 0;
+  margin: 18px 0 0;
   font-family: var(--mono); font-size: 9px; letter-spacing: 0.16em;
   color: var(--text-3);
 }
 
+/* The flight scenes are intentionally small, original UI silhouettes — a
+   single theatrical vehicle rather than a reference to any existing craft. */
+.flight-scene { display: grid; justify-items: center; }
+.flight-copy { display: grid; justify-items: center; }
+.flight-craft {
+  position: relative; width: 104px; height: 82px; margin-bottom: 22px;
+  filter: drop-shadow(0 0 12px rgba(var(--accent-rgb), 0.12));
+}
+.craft-body {
+  position: absolute; left: 23px; top: 23px; width: 58px; height: 35px;
+  border: 1px solid rgba(226, 239, 240, 0.62); border-radius: 52% 52% 35% 35%;
+  background: linear-gradient(145deg, rgba(226,239,240,0.18), rgba(226,239,240,0.025));
+  clip-path: polygon(50% 0, 94% 34%, 82% 100%, 18% 100%, 6% 34%);
+}
+.craft-window { position: absolute; z-index: 1; left: 43px; top: 33px; width: 18px; height: 10px; border: 1px solid rgba(var(--accent-rgb),0.85); border-radius: 50%; box-shadow: 0 0 10px rgba(var(--accent-rgb),0.3); }
+.craft-antenna { position: absolute; left: 51px; top: 10px; height: 14px; border-left: 1px solid rgba(226,239,240,0.56); }
+.craft-antenna::after { content: ""; position: absolute; left: -2px; top: -3px; width: 4px; height: 4px; border-radius: 50%; background: rgba(var(--accent-rgb),0.9); }
+.craft-leg { position: absolute; top: 53px; width: 25px; border-top: 1px solid rgba(226,239,240,0.48); transform-origin: left center; }
+.craft-leg-l { left: 29px; transform: rotate(38deg); }
+.craft-leg-r { right: 29px; transform: rotate(142deg); }
+.craft-engine { position: absolute; left: 44px; top: 59px; width: 16px; height: 16px; border-radius: 50% 50% 70% 70%; background: radial-gradient(ellipse at 50% 0, rgba(187,255,244,0.88), rgba(var(--accent-rgb),0.34) 42%, transparent 72%); opacity: 0.72; }
+.flight-scene-entry .flight-craft { transform: translateY(calc(var(--mission-entry) * 82px)); animation: craft-hover 4.5s ease-in-out infinite; }
+.descent-beacon { display: grid; justify-items: center; gap: 3px; height: 31px; margin-top: 17px; }
+.descent-beacon span { width: 7px; height: 7px; border-right: 1px solid rgba(var(--accent-rgb),0.85); border-bottom: 1px solid rgba(var(--accent-rgb),0.85); transform: rotate(45deg); animation: beacon-down 1.7s ease-in-out infinite; }
+.descent-beacon span:nth-child(2) { animation-delay: 0.16s; opacity: 0.72; }.descent-beacon span:nth-child(3) { animation-delay: 0.32s; opacity: 0.46; }
+.flight-scene-exit .flight-craft { margin-bottom: 25px; transform: translateY(calc(var(--mission-exit) * -105px)) scale(calc(1 - var(--mission-exit) * 0.26)); opacity: calc(1 - var(--mission-exit) * 0.82); filter: drop-shadow(0 0 13px rgba(251,191,36,0.28)); }
+.ascent-craft .craft-window { border-color: rgba(251,191,36,0.9); box-shadow: 0 0 10px rgba(251,191,36,0.35); }.ascent-craft .craft-antenna::after { background: rgba(251,191,36,0.9); }.ascent-craft .craft-engine { background: radial-gradient(ellipse at 50% 0, rgba(255,235,177,0.9), rgba(251,191,36,0.42) 42%, transparent 72%); }
+@keyframes craft-hover { 50% { translate: 0 -6px; } }
+@keyframes beacon-down { 50% { opacity: 1; translate: 0 4px; } }
+
 @media (prefers-reduced-motion: reduce) {
   .console { transform: none; opacity: 1; filter: none; pointer-events: auto; transition: none; }
   .mission-entry, .mission-exit { display: none; }
+  .flight-craft, .descent-beacon span { animation: none; }
 }
 
 /* ---- 04 scope ---- */

@@ -1430,9 +1430,8 @@ if (typeof IntersectionObserver === "function") {
   new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; }, { rootMargin: "120px" }).observe(STAGE);
 }
 
-/* The pinned chapter is four viewport lengths: briefing, console arrival and
-   interaction, console departure, then the editorial handoff. Each cue has a
-   discrete scroll range, so the exit copy cannot share a frame with the dock. */
+/* The pin reserves a long approach and departure. The deliberate gaps between
+   ranges ensure neither flight scene can share a frame with the console dock. */
 const MISSION_CHAPTER = el("live-proof");
 const MISSION_CONSOLE = MISSION_CHAPTER.querySelector(".console");
 function scrollRange(progress, start, end) {
@@ -1443,10 +1442,10 @@ function updateMissionScroll() {
   const viewport = Math.max(1, innerHeight);
   const travel = Math.max(1, rect.height - viewport);
   const progress = Math.max(0, Math.min(1, -rect.top / travel));
-  const entry = scrollRange(progress, 0, 0.25);
-  const consoleIn = scrollRange(progress, 0.25, 0.34);
-  const consoleOut = scrollRange(progress, 0.66, 0.75);
-  const exit = scrollRange(progress, 0.75, 1);
+  const entry = scrollRange(progress, 0, 0.30);
+  const consoleIn = scrollRange(progress, 0.30, 0.40);
+  const consoleOut = scrollRange(progress, 0.64, 0.72);
+  const exit = scrollRange(progress, 0.78, 0.93);
 
   MISSION_CHAPTER.style.setProperty("--mission-entry", entry.toFixed(3));
   MISSION_CHAPTER.style.setProperty("--mission-console-in", consoleIn.toFixed(3));
