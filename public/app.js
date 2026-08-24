@@ -399,18 +399,22 @@ function renderActions() {
   el("observation").disabled = !states.capture;
 }
 
-/** Overlays are pinned to the canvas markers so DOM and scene stay in step. */
+/** Overlays are pinned to the canvas markers so DOM and scene stay in step.
+    The console is now a page element rather than the viewport, so each card is
+    also clamped inside the stage: a narrow frame can no longer push one of them
+    past an edge. */
 function layoutOverlays() {
   const { w, h } = app.view;
   if (w === 0) return;
-  const memory = markerPoint(w, h, "memory");
-  const source = markerPoint(w, h, "source");
-  const memcard = el("memcard");
-  memcard.style.left = `${Math.round(memory.x - 86)}px`;
-  memcard.style.top = `${Math.round(memory.y + 46)}px`;
-  const sourcecard = el("sourcecard");
-  sourcecard.style.left = `${Math.round(source.x - 44)}px`;
-  sourcecard.style.top = `${Math.round(source.y + 46)}px`;
+  pinCard(el("memcard"), markerPoint(w, h, "memory"), 86, w);
+  pinCard(el("sourcecard"), markerPoint(w, h, "source"), 44, w);
+}
+
+function pinCard(card, point, offset, w) {
+  const width = card.offsetWidth || 0;
+  const left = clamp(point.x - offset, 16, Math.max(16, w - width - 16));
+  card.style.left = `${Math.round(left)}px`;
+  card.style.top = `${Math.round(point.y + 46)}px`;
 }
 
 function markerPoint(w, h, which) {
@@ -1418,9 +1422,18 @@ function paintDivider(ctx, w, h, alpha) {
 
 let lastFrame = 0;
 
+/* The console lives in a scrolling page: painting a scene nobody can see
+   costs a frame every 16ms for nothing. A replay is exempt — it advances and
+   settles from the frame loop, so it must keep running to completion. */
+let onScreen = true;
+if (typeof IntersectionObserver === "function") {
+  new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; }, { rootMargin: "120px" }).observe(STAGE);
+}
+
 function paintFrame(now) {
   const { w, h } = app.view;
   if (w === 0 || app.mission === null) return;
+  if (!onScreen && app.phase !== "replay") { lastFrame = now; return; }
   const dt = lastFrame === 0 ? 0 : Math.min(0.05, (now - lastFrame) / 1000);
   lastFrame = now;
 
@@ -1687,6 +1700,8 @@ el("observation").addEventListener("keydown", (event) => {
 });
 
 addEventListener("resize", resizeCanvas);
+/* The stage resizes with the page around it, not only with the window. */
+if (typeof ResizeObserver === "function") new ResizeObserver(resizeCanvas).observe(STAGE);
 reduceMotion.addEventListener("change", () => {
   lastFrame = 0;
   if (!reduceMotion.matches) requestAnimationFrame(loop);

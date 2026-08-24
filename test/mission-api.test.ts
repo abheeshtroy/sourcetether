@@ -96,11 +96,22 @@ test("mission web handler serves only the bundled browser entry points", async (
   const web = createMissionWebHandler(harness.dependencies);
   const served = await staticRequest(web, "/");
   assert.equal(served.status, 200);
-  assert.match(served.body, /SourceTether — Lunar Landing/);
+  assert.match(served.body, /SourceTether/);
   assert.match(served.body, /id="hero"/);
   assert.match(served.contentType, /text\/html/);
-  assert.equal(served.body.includes("9.81"), false);
-  assert.equal(served.body.includes("1.62"), false);
+
+  /* The mission console shows only what the gate released, so no gravity value
+     may be baked into its markup: every value in it has to arrive from the API
+     at runtime. The narrative sections around the console are editorial copy
+     about the demo and never feed the gate, so the invariant is asserted on the
+     console subtree rather than on the whole document. */
+  const consoleStart = served.body.indexOf('<div class="console">');
+  const consoleEnd = served.body.indexOf('<p class="console-note"');
+  assert.ok(consoleStart > 0 && consoleEnd > consoleStart);
+  const missionConsole = served.body.slice(consoleStart, consoleEnd);
+  assert.match(missionConsole, /id="stage"/);
+  assert.equal(missionConsole.includes("9.81"), false);
+  assert.equal(missionConsole.includes("1.62"), false);
 
   const missing = await staticRequest(web, "/secret.txt");
   assert.deepEqual({ status: missing.status, body: JSON.parse(missing.body) }, {

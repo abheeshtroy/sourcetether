@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SourceTether — Lunar Landing</title>
+<title>SourceTether — source-verified memory for coding agents</title>
+<meta name="description" content="SourceTether binds an agent-memory claim to an exact TypeScript declaration and re-verifies that declaration's AST fingerprint before the memory is released.">
 <link rel="stylesheet" href="/styles.css">
 </head>
 <body data-phase="boot">
@@ -12,93 +13,322 @@
      display:none subtree and url(#…) stops resolving. Populated by app.js. -->
 <svg class="glass-filters" id="glass-filters" aria-hidden="true"></svg>
 
-<main class="shell">
+<a class="skip" href="#live-proof">Skip to the live proof</a>
 
-  <header class="topbar">
-    <span class="brand">SourceTether</span>
-    <span class="sep"></span>
-    <code class="ctx" id="calibration">initialising</code>
-    <div class="topbar-right">
-      <span class="hosted-note" id="hosted-note" hidden>Hosted guided demo · local mode supports Claude-Mem provenance</span>
-      <details class="proof">
-        <summary>Technical proof</summary>
-        <div class="proof-body">
-          <dl>
-            <div><dt>anchor</dt><dd><code id="proof-anchor">—</code></dd></div>
-            <div><dt>declaration kind</dt><dd><code id="proof-kind">—</code></dd></div>
-            <div><dt>captured fingerprint</dt><dd><code id="proof-captured">—</code></dd></div>
-            <div><dt>current fingerprint</dt><dd><code id="proof-current">—</code></dd></div>
-            <div><dt>gate</dt><dd><code id="proof-gate">—</code></dd></div>
-            <div><dt>observation</dt><dd><code id="proof-observation">—</code></dd></div>
-          </dl>
+<nav class="sitebar">
+  <a class="brand" href="#top">SourceTether</a>
+  <span class="sitebar-tag">source-verified memory for coding agents</span>
+  <div class="sitebar-links">
+    <a href="#how">How it works</a>
+    <a href="#live-proof">Live proof</a>
+    <a href="https://github.com/abheeshtroy/sourcetether" rel="noreferrer">GitHub</a>
+  </div>
+</nav>
+
+<main class="page" id="top">
+
+  <!-- ------------------------------------------------------------ hero -->
+  <section class="hero">
+    <div class="hero-sky" aria-hidden="true"></div>
+    <div class="hero-grain" aria-hidden="true"></div>
+
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="kicker">Retrieval gate for coding agents</p>
+        <h1 class="display h1">Agent memory should not<br>outlive its source.</h1>
+        <p class="lede">SourceTether ties every remembered claim to one exact TypeScript
+          declaration, and re-reads that declaration before the memory is allowed back
+          into the agent's context.</p>
+        <div class="hero-actions">
+          <a class="btn btn-cta" href="#live-proof">Watch a memory get withheld</a>
+          <a class="btn btn-quiet" href="#how">How it works</a>
         </div>
-      </details>
-    </div>
-  </header>
-
-  <section class="stage" id="stage">
-    <canvas id="hero" aria-label="Mission stage: the tether between a captured memory and its source declaration, and the lunar descent it governs"></canvas>
-    <div class="stage-veil" aria-hidden="true"></div>
-    <div class="stage-grain" aria-hidden="true"></div>
-
-    <span class="edge edge-l" id="edge-left"></span>
-    <span class="edge edge-r" id="edge-right"></span>
-
-    <div class="memcard" id="memcard" hidden>
-      <span class="mc-label">Memory</span>
-      <code class="mc-id" id="memory-id">—</code>
-      <span class="mc-state" id="memory-state">—</span>
-    </div>
-
-    <div class="sourcecard" id="sourcecard">
-      <div class="sc-head">
-        <span class="sc-label">Source</span>
-        <span class="sc-kind" id="source-kind">—</span>
       </div>
-      <code class="sc-decl" id="source-declaration">—</code>
-      <code class="sc-path" id="source-path">—</code>
+
+      <figure class="tether-figure" role="img"
+        aria-label="A captured memory on the left is joined by a tether to the source declaration DescentModel.gravity on the right.">
+        <svg viewBox="34 46 572 240" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <radialGradient id="node-glow">
+              <stop offset="0%" stop-color="rgba(90,235,212,0.42)"/>
+              <stop offset="100%" stop-color="rgba(90,235,212,0)"/>
+            </radialGradient>
+            <linearGradient id="tether-line" x1="0" x2="1">
+              <stop offset="0%" stop-color="rgba(90,235,212,0.15)"/>
+              <stop offset="50%" stop-color="rgba(90,235,212,0.62)"/>
+              <stop offset="100%" stop-color="rgba(90,235,212,0.15)"/>
+            </linearGradient>
+          </defs>
+
+          <circle cx="128" cy="140" r="86" fill="url(#node-glow)"/>
+          <circle cx="512" cy="140" r="86" fill="url(#node-glow)"/>
+
+          <path class="tf-tether" d="M 166 140 Q 320 196 474 140"/>
+          <path class="tf-flow"   d="M 166 140 Q 320 196 474 140"/>
+
+          <circle class="tf-ring" cx="128" cy="140" r="36"/>
+          <circle class="tf-core" cx="128" cy="140" r="7"/>
+
+          <g class="tf-bracket">
+            <path d="M 496 106 L 476 106 L 476 174 L 496 174"/>
+            <path d="M 528 106 L 548 106 L 548 174 L 548 174 L 528 174"/>
+          </g>
+          <circle class="tf-core" cx="512" cy="140" r="7"/>
+
+          <text class="tf-label" x="128" y="214" text-anchor="middle">MEMORY</text>
+          <text class="tf-sub"   x="128" y="234" text-anchor="middle">one atomic claim</text>
+          <text class="tf-label" x="512" y="214" text-anchor="middle">SOURCE</text>
+          <text class="tf-sub"   x="512" y="234" text-anchor="middle">DescentModel.gravity</text>
+          <text class="tf-mid"   x="320" y="268" text-anchor="middle">verified on every retrieval</text>
+        </svg>
+      </figure>
     </div>
 
-    <div class="narrative" id="narrative" aria-live="polite">
-      <p class="n-kicker" id="narrative-kicker">Retrieval gate</p>
-      <p class="verdict" id="verdict">—</p>
-      <p class="lesson" id="lesson">—</p>
-      <p class="claim" id="claim" hidden></p>
-      <div class="reread" id="reread" hidden>
-        <span class="rr-label">Re-read required</span>
-        <code class="rr-symbol" id="reread-symbol">—</code>
-        <code class="rr-reason" id="reread-reason">—</code>
+    <a class="scroll-cue" href="#problem"><span>the failure</span></a>
+  </section>
+
+  <!-- --------------------------------------------------------- problem -->
+  <section class="band" id="problem">
+    <header class="band-head">
+      <p class="kicker">01 — The failure</p>
+      <h2 class="display h2">The source moved. The memory didn't.</h2>
+      <p class="band-lede">An agent remembered a value once. Nothing told it when the
+        declaration underneath that value changed.</p>
+    </header>
+
+    <div class="mismatch">
+      <div class="mm-card mm-stale">
+        <span class="mm-label">Remembered claim</span>
+        <code class="mm-code">static gravity = <b>9.81</b>;</code>
+        <span class="mm-note">Captured while the lander was calibrated for Earth.</span>
+      </div>
+
+      <div class="mm-break" aria-hidden="true">
+        <svg viewBox="0 0 120 60" preserveAspectRatio="none">
+          <path class="mb-l" d="M 0 30 Q 30 42 46 34"/>
+          <path class="mb-r" d="M 120 30 Q 90 42 74 34"/>
+          <circle class="mb-dot" cx="46" cy="34" r="2.5"/>
+          <circle class="mb-dot" cx="74" cy="34" r="2.5"/>
+        </svg>
+        <span class="mm-break-tag">fingerprint changed</span>
+      </div>
+
+      <div class="mm-card mm-live">
+        <span class="mm-label">Current source</span>
+        <code class="mm-code">static gravity = <b>1.62</b>;</code>
+        <span class="mm-note">demo/mission/src/descent-model.ts → DescentModel.gravity</span>
       </div>
     </div>
 
-    <div class="results" id="results" hidden>
-      <div class="result stale">
-        <span class="r-title">Stale memory</span>
-        <span class="r-outcome" id="stale-outcome">—</span>
-        <span class="r-stat" id="stale-stat">—</span>
-      </div>
-      <div class="result good">
-        <span class="r-title">Revalidated source</span>
-        <span class="r-outcome" id="good-outcome">—</span>
-        <span class="r-stat" id="good-stat">—</span>
-      </div>
+    <p class="consequence">Hand the agent the remembered <code>9.81</code> and its controller
+      thrusts for a planet it is no longer on: <b class="hot">fuel depleted at 491.4 m,
+      still climbing at +67.64 m/s</b>. Make it re-read the declaration first and the
+      same controller touches down at <b class="ok">−1.50 m/s with 4.33 fuel remaining</b>.</p>
+  </section>
+
+  <!-- ----------------------------------------------------- how it works -->
+  <section class="band" id="how">
+    <header class="band-head">
+      <p class="kicker">02 — How it works</p>
+      <h2 class="display h2">Capture, anchor, verify.</h2>
+      <p class="band-lede">Three steps a developer wires in once. Everything after that
+        happens at retrieval time, before the agent sees a word.</p>
+    </header>
+
+    <ol class="steps">
+      <li class="step">
+        <span class="step-n">01</span>
+        <h3 class="step-h">Capture a narrow claim</h3>
+        <p>One atomic, checkable fact — not a summary, not a paragraph of context.</p>
+        <code class="step-code">DescentModel.gravity is a static property of class
+          DescentModel initialized to the numeric literal 9.81.</code>
+      </li>
+      <li class="step">
+        <span class="step-n">02</span>
+        <h3 class="step-h">Anchor it to a symbol</h3>
+        <p>The claim is bound to a resolved declaration: project-relative path,
+          qualified name, declaration kind, and a structural fingerprint of its AST.</p>
+        <code class="step-code">src/descent-model.ts → DescentModel.gravity
+          <span class="step-code-dim">class_static_property · sha256 fingerprint · no line or byte offsets</span></code>
+      </li>
+      <li class="step">
+        <span class="step-n">03</span>
+        <h3 class="step-h">Verify before release</h3>
+        <p>On retrieval the declaration is resolved again and re-fingerprinted. The gate
+          has three answers, and only one of them releases text.</p>
+        <ul class="gate-list">
+          <li><span class="g-tag g-ok">match</span> release the claim</li>
+          <li><span class="g-tag g-hot">changed</span> withhold, and name the symbol to re-read</li>
+          <li><span class="g-tag g-off">unresolved</span> withhold</li>
+        </ul>
+      </li>
+    </ol>
+
+    <div class="nuance">
+      <p class="nuance-h display">Changed does not mean false.</p>
+      <p>A changed fingerprint says the ground under the claim moved — not that the claim
+        was ever a lie. SourceTether does not overwrite the memory, contradict it, or guess
+        a new value. It withholds it and hands back the exact symbol the agent has to read
+        again before it may speak.</p>
+    </div>
+
+    <div class="nuance nuance-alt">
+      <p class="nuance-h display">Provenance, never blind trust.</p>
+      <p>In local mode Claude-Mem supplies the observation a claim came from, and
+        SourceTether records that provenance. It never exposes raw Claude-Mem content on
+        trust: the only text that reaches the agent is a claim whose anchor just verified
+        against the file on disk.</p>
     </div>
   </section>
 
-  <footer class="dock">
-    <label class="obs" id="observation-control">Observation
-      <input id="observation" value="10" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="Claude-Mem observation id">
-    </label>
-    <div class="actions">
-      <button id="capture" class="btn" type="button">Capture memory</button>
-      <button id="moon" class="btn" type="button">Migrate to Moon</button>
-      <button id="replay" class="btn" type="button">Run landing replay</button>
-      <button id="reset" class="btn btn-ghost" type="button">Reset</button>
+  <!-- ------------------------------------------------------- live proof -->
+  <section class="band band-proof" id="live-proof">
+    <header class="band-head">
+      <p class="kicker">03 — Live proof</p>
+      <h2 class="display h2">Watch the gate close.</h2>
+      <p class="band-lede">Capture a memory on Earth, recalibrate the mission for the Moon,
+        then run the landing replay. The memory is withheld the moment the declaration's
+        fingerprint stops matching — and the two landers show what that is worth.</p>
+      <p class="band-steps"><span>Capture memory</span><span>Migrate to Moon</span><span>Run landing replay</span></p>
+    </header>
+
+    <div class="console">
+      <div class="shell">
+
+        <header class="topbar">
+          <span class="console-brand">Mission console</span>
+          <span class="sep"></span>
+          <code class="ctx" id="calibration">initialising</code>
+          <div class="topbar-right">
+            <span class="hosted-note" id="hosted-note" hidden>Hosted guided demo · local mode supports Claude-Mem provenance</span>
+            <details class="proof">
+              <summary>Technical proof</summary>
+              <div class="proof-body">
+                <dl>
+                  <div><dt>anchor</dt><dd><code id="proof-anchor">—</code></dd></div>
+                  <div><dt>declaration kind</dt><dd><code id="proof-kind">—</code></dd></div>
+                  <div><dt>captured fingerprint</dt><dd><code id="proof-captured">—</code></dd></div>
+                  <div><dt>current fingerprint</dt><dd><code id="proof-current">—</code></dd></div>
+                  <div><dt>gate</dt><dd><code id="proof-gate">—</code></dd></div>
+                  <div><dt>observation</dt><dd><code id="proof-observation">—</code></dd></div>
+                </dl>
+              </div>
+            </details>
+          </div>
+        </header>
+
+        <section class="stage" id="stage">
+          <canvas id="hero" aria-label="Mission stage: the tether between a captured memory and its source declaration, and the lunar descent it governs"></canvas>
+          <div class="stage-veil" aria-hidden="true"></div>
+          <div class="stage-grain" aria-hidden="true"></div>
+
+          <span class="edge edge-l" id="edge-left"></span>
+          <span class="edge edge-r" id="edge-right"></span>
+
+          <div class="memcard" id="memcard" hidden>
+            <span class="mc-label">Memory</span>
+            <code class="mc-id" id="memory-id">—</code>
+            <span class="mc-state" id="memory-state">—</span>
+          </div>
+
+          <div class="sourcecard" id="sourcecard">
+            <div class="sc-head">
+              <span class="sc-label">Source</span>
+              <span class="sc-kind" id="source-kind">—</span>
+            </div>
+            <code class="sc-decl" id="source-declaration">—</code>
+            <code class="sc-path" id="source-path">—</code>
+          </div>
+
+          <div class="narrative" id="narrative" aria-live="polite">
+            <p class="n-kicker" id="narrative-kicker">Retrieval gate</p>
+            <p class="verdict" id="verdict">—</p>
+            <p class="lesson" id="lesson">—</p>
+            <p class="claim" id="claim" hidden></p>
+            <div class="reread" id="reread" hidden>
+              <span class="rr-label">Re-read required</span>
+              <code class="rr-symbol" id="reread-symbol">—</code>
+              <code class="rr-reason" id="reread-reason">—</code>
+            </div>
+          </div>
+
+          <div class="results" id="results" hidden>
+            <div class="result stale">
+              <span class="r-title">Stale memory</span>
+              <span class="r-outcome" id="stale-outcome">—</span>
+              <span class="r-stat" id="stale-stat">—</span>
+            </div>
+            <div class="result good">
+              <span class="r-title">Revalidated source</span>
+              <span class="r-outcome" id="good-outcome">—</span>
+              <span class="r-stat" id="good-stat">—</span>
+            </div>
+          </div>
+        </section>
+
+        <footer class="dock">
+          <label class="obs" id="observation-control">Observation
+            <input id="observation" value="10" inputmode="numeric" autocomplete="off" spellcheck="false" aria-label="Claude-Mem observation id">
+          </label>
+          <div class="actions">
+            <button id="capture" class="btn" type="button">Capture memory</button>
+            <button id="moon" class="btn" type="button">Migrate to Moon</button>
+            <button id="replay" class="btn" type="button">Run landing replay</button>
+            <button id="reset" class="btn btn-ghost" type="button">Reset</button>
+          </div>
+          <p class="err" id="error" role="alert" hidden></p>
+        </footer>
+
+      </div>
     </div>
-    <p class="err" id="error" role="alert" hidden></p>
-  </footer>
+
+    <p class="console-note" id="console-note">
+      <b>This page runs a deterministic guided walkthrough.</b> Every value, fingerprint
+      and trajectory above is computed in the browser from the same fixture the real
+      system uses — no live Claude-Mem retrieval happens here. Run
+      <code>npm run dev</code> from the repository for the real integration: local source
+      files on disk, real AST fingerprints, and Claude-Mem provenance.
+    </p>
+  </section>
+
+  <!-- ---------------------------------------------------------- closing -->
+  <section class="band band-close" id="scope">
+    <header class="band-head">
+      <p class="kicker">04 — Scope</p>
+      <h2 class="display h2">TypeScript declaration anchors today. Source-grounded agent memory as the broader idea.</h2>
+    </header>
+
+    <div class="scope-grid">
+      <div class="scope-col">
+        <p class="scope-h">What it does now</p>
+        <ul>
+          <li>Binds a claim to a resolved TypeScript declaration by path and qualified name.</li>
+          <li>Compares a structural AST fingerprint, so reformatting and surrounding edits do not trip the gate.</li>
+          <li>Releases, or withholds with an exact re-read target. Three states, never a guess.</li>
+        </ul>
+      </div>
+      <div class="scope-col">
+        <p class="scope-h">What it deliberately does not do</p>
+        <ul>
+          <li>Judge whether a memory is true. Verification here is syntactic, not semantic.</li>
+          <li>Rewrite, merge, or summarise a memory to keep it alive.</li>
+          <li>Pass through Claude-Mem narrative text that no anchor vouches for.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="close-actions">
+      <a class="btn btn-cta" href="https://github.com/abheeshtroy/sourcetether" rel="noreferrer">Read the source on GitHub</a>
+      <a class="btn btn-quiet" href="#live-proof">Run the walkthrough again</a>
+    </div>
+  </section>
 
 </main>
+
+<footer class="sitefoot">
+  <span>SourceTether</span>
+  <span>Hosted: deterministic guided walkthrough. Local: real source resolution and Claude-Mem provenance.</span>
+</footer>
 
 <script type="module" src="/app.js"></script>
 </body>
