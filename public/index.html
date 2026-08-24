@@ -61,27 +61,21 @@
   <!-- ------------------------------------------------------------ hero -->
   <section class="hero">
     <div class="hero-sky" aria-hidden="true"></div>
-    <!-- Distant source: the angle steps inward per band, so the shafts read
-         as near-parallel rays from one far light rather than a fan. -->
-    <div class="shafts" aria-hidden="true">
-      <span class="shaft shaft-l1"></span><span class="shaft shaft-l2"></span><span class="shaft shaft-l3"></span>
-      <span class="shaft shaft-r1"></span><span class="shaft shaft-r2"></span><span class="shaft shaft-r3"></span>
-    </div>
 
     <div class="hero-inner">
       <div class="hero-copy">
-        <p class="kicker hero-fade">Retrieval gate for coding agents</p>
-        <h1 class="display h1"><span class="hero-word">Agent memory</span><br><span class="hero-word hero-word-2">should not outlive</span><br><span class="hero-word hero-word-3">its source.</span></h1>
-        <p class="lede hero-fade hero-fade-2">SourceTether ties every remembered claim to one exact TypeScript
+        <p class="kicker">Retrieval gate for coding agents</p>
+        <h1 class="display h1">Agent memory<br>should not outlive<br>its source.</h1>
+        <p class="lede">SourceTether ties every remembered claim to one exact TypeScript
           declaration, and re-reads that declaration before the memory is allowed back
           into the agent's context.</p>
-        <div class="hero-actions hero-fade hero-fade-3">
+        <div class="hero-actions">
           <a class="btn btn-cta" href="#live-proof">Watch a memory get withheld</a>
           <a class="btn btn-quiet" href="#how">How it works</a>
         </div>
       </div>
 
-      <figure class="tether-figure hero-fade hero-fade-2" role="img"
+      <figure class="tether-figure" role="img"
         aria-label="A captured memory on the left is joined by a tether to the source declaration DescentModel.gravity on the right.">
         <svg viewBox="34 46 572 240" preserveAspectRatio="xMidYMid meet">
           <defs>
@@ -336,19 +330,20 @@
 
     <div class="scope-grid">
       <div class="scope-col">
-        <p class="scope-h">What it does now</p>
+        <p class="scope-h">Working today</p>
         <ul>
-          <li>Binds a claim to a resolved TypeScript declaration by path and qualified name.</li>
-          <li>Compares a structural AST fingerprint, so reformatting and surrounding edits do not trip the gate.</li>
-          <li>Releases, or withholds with an exact re-read target. Three states, never a guess.</li>
+          <li>Binds one narrow claim to a resolved TypeScript declaration by project path and qualified name.</li>
+          <li>Compares a structural AST fingerprint, so reformatting and edits around the declaration leave the gate open.</li>
+          <li>Releases on a match, or withholds and hands back the exact symbol to re-read. Three answers, never a guess.</li>
+          <li>Carries Claude-Mem provenance through local mode, without ever releasing text the anchor has not vouched for.</li>
         </ul>
       </div>
-      <div class="scope-col">
-        <p class="scope-h">What it deliberately does not do</p>
+      <div class="scope-col scope-next">
+        <p class="scope-h">The next phase</p>
         <ul>
-          <li>Judge whether a memory is true. Verification here is syntactic, not semantic.</li>
-          <li>Rewrite, merge, or summarise a memory to keep it alive.</li>
-          <li>Pass through Claude-Mem narrative text that no anchor vouches for.</li>
+          <li>Anchors past a single declaration: one claim spanning several symbols, and source that is not TypeScript.</li>
+          <li>A retrieval hook an agent calls directly, so the gate runs inside an ordinary memory lookup rather than a demo.</li>
+          <li>Telling an edit that invalidates a claim from one that only moved it — so <span class="np">changed</span> asks for a re-read less often, and means more when it does.</li>
         </ul>
       </div>
     </div>
