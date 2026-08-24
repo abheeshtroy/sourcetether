@@ -1430,22 +1430,30 @@ if (typeof IntersectionObserver === "function") {
   new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; }, { rootMargin: "120px" }).observe(STAGE);
 }
 
-/* The mission chapter has a deliberately long scroll range. Its pinned frame
-   is a different space, not another card in the editorial page: the first
-   part of the range brings it in, the middle leaves it fully interactive, and
-   the last part returns the reader to the page below. */
+/* The pinned chapter is four viewport lengths: briefing, console arrival and
+   interaction, console departure, then the editorial handoff. Each cue has a
+   discrete scroll range, so the exit copy cannot share a frame with the dock. */
 const MISSION_CHAPTER = el("live-proof");
+const MISSION_CONSOLE = MISSION_CHAPTER.querySelector(".console");
+function scrollRange(progress, start, end) {
+  return Math.max(0, Math.min(1, (progress - start) / (end - start)));
+}
 function updateMissionScroll() {
   const rect = MISSION_CHAPTER.getBoundingClientRect();
   const viewport = Math.max(1, innerHeight);
   const travel = Math.max(1, rect.height - viewport);
   const progress = Math.max(0, Math.min(1, -rect.top / travel));
-  const enter = Math.max(0, Math.min(1, progress / 0.18));
-  const exit = Math.max(0, Math.min(1, (progress - 0.82) / 0.18));
+  const entry = scrollRange(progress, 0, 0.25);
+  const consoleIn = scrollRange(progress, 0.25, 0.34);
+  const consoleOut = scrollRange(progress, 0.66, 0.75);
+  const exit = scrollRange(progress, 0.75, 1);
 
-  MISSION_CHAPTER.style.setProperty("--mission-enter", enter.toFixed(3));
+  MISSION_CHAPTER.style.setProperty("--mission-entry", entry.toFixed(3));
+  MISSION_CHAPTER.style.setProperty("--mission-console-in", consoleIn.toFixed(3));
+  MISSION_CHAPTER.style.setProperty("--mission-console-out", consoleOut.toFixed(3));
   MISSION_CHAPTER.style.setProperty("--mission-exit", exit.toFixed(3));
-  document.body.classList.toggle("in-demo", enter >= 0.92 && exit <= 0.08);
+  MISSION_CONSOLE.classList.toggle("is-interactive", consoleIn >= 0.995 && consoleOut <= 0.005);
+  document.body.classList.toggle("in-demo", consoleIn >= 0.92 && consoleOut <= 0.08);
 }
 addEventListener("scroll", updateMissionScroll, { passive: true });
 
