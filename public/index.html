@@ -212,17 +212,15 @@
   </section>
 
   <!-- ------------------------------------------------------- live proof -->
-  <section class="band band-proof" id="live-proof">
-    <header class="band-head">
-      <p class="kicker">03 — Live proof</p>
-      <h2 class="display h2">Watch the gate close.</h2>
-      <p class="band-lede">Capture a memory on Earth, recalibrate the mission for the Moon,
-        then run the landing replay. The memory is withheld the moment the declaration's
-        fingerprint stops matching — and the two landers show what that is worth.</p>
-      <p class="band-steps"><span>Capture memory</span><span>Migrate to Moon</span><span>Run landing replay</span></p>
-    </header>
+  <section class="mission-chapter" id="live-proof" aria-label="Interactive SourceTether mission walkthrough">
+    <div class="mission-pin">
+      <div class="mission-entry" aria-hidden="true">
+        <p class="kicker">03 — Live proof</p>
+        <p class="display mission-entry-title">Enter the mission.</p>
+        <p>Scroll into the source state, then decide what the agent is allowed to remember.</p>
+      </div>
 
-    <div class="console">
+      <div class="console">
       <div class="shell">
 
         <header class="topbar">
@@ -310,15 +308,14 @@
         </footer>
 
       </div>
-    </div>
+      </div>
 
-    <p class="console-note" id="console-note">
-      <b>This page runs a deterministic guided walkthrough.</b> Every value, fingerprint
-      and trajectory above is computed in the browser from the same fixture the real
-      system uses — no live Claude-Mem retrieval happens here. Run
-      <code>npm run dev</code> from the repository for the real integration: local source
-      files on disk, real AST fingerprints, and Claude-Mem provenance.
-    </p>
+      <div class="mission-exit" aria-hidden="true">
+        <p class="kicker">Mission complete</p>
+        <p class="display mission-exit-title">Back to the work.</p>
+        <p>Keep scrolling to leave the walkthrough and return to the product roadmap.</p>
+      </div>
+    </div>
   </section>
 
   <!-- ---------------------------------------------------------- closing -->

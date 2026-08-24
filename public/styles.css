@@ -200,7 +200,7 @@
    the section's fade strips need the colour of the page it is dissolving
    into, which is the one value here that must not be overridden. */
 
-.band-proof {
+.mission-chapter {
   color-scheme: dark;
   color: var(--text-1);
 
@@ -1026,87 +1026,96 @@ body[data-phase="settled"] .narrative { transform: translateY(0); }
 .nuance p { font-size: 14.5px; line-height: 1.66; color: var(--text-2); }
 .nuance-alt { margin-top: 16px; }
 
-/* ---- 03 the console ---- */
-
-/* The console band keeps the page's column so every section head starts on
-   the same vertical line. */
-.band-steps {
-  margin-top: 26px; display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
-  font-family: var(--mono); font-size: 9.5px;
-  letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3);
-}
-.band-steps span {
-  padding: 5px 11px; border-radius: 6px;
-  border: 1px solid var(--border-strong); background: rgba(255,255,255,0.02);
-}
-.band-steps span + span::before {
-  content: "→"; margin-right: 10px; margin-left: -2px; color: var(--text-3);
-}
-
-/* Full bleed. The console is no longer an object on the page — the page
-   dissolves into it, the scene runs edge to edge, and it dissolves back
-   out at the bottom. */
-.band-proof {
+/* ---- 03 the mission chapter ----
+   This is deliberately not another editorial band. It has its own long
+   scroll range: entering it brings a different world over the viewport,
+   holding there keeps the console interactive, and the final part of that
+   range hands the reader back to the editorial page below. */
+.mission-chapter {
+  position: relative;
+  min-height: 260svh;
   max-width: none;
-  padding: 0;
   background: var(--void);
   color: var(--text-1);
-  overflow: hidden;
+  isolation: isolate;
+  overflow: clip;
+  --mission-enter: 0;
+  --mission-exit: 0;
 }
-.band + .band-proof { border-top: none; }
-.band-proof + .band { border-top: none; }
+.band + .mission-chapter { border-top: none; }
+.mission-chapter + .band { border-top: none; }
 
-/* The two seams. Each strip runs from the page's own background to the
-   void, over the void, so neither edge is ever a line. */
-.band-proof::before,
-.band-proof::after {
-  content: ""; position: absolute; left: 0; right: 0;
-  height: clamp(200px, 32vh, 420px);
-  pointer-events: none; z-index: 1;
+/* The surrounding page dissolves away before the console has fully arrived. */
+.mission-chapter::before,
+.mission-chapter::after {
+  content: ""; position: absolute; left: 0; right: 0; pointer-events: none; z-index: 0;
 }
-.band-proof::before { top: 0;    background: linear-gradient(180deg, var(--page-bg), var(--void)); }
-.band-proof::after  { bottom: 0; background: linear-gradient(180deg, var(--void), var(--page-bg)); }
+.mission-chapter::before {
+  top: 0; height: min(34svh, 360px);
+  background: linear-gradient(180deg, var(--page-bg), var(--void));
+}
+.mission-chapter::after {
+  bottom: 0; height: min(34svh, 360px);
+  background: linear-gradient(180deg, var(--void), var(--page-bg));
+}
+
+/* The pinned frame is the other world. It stays at viewport scale while its
+   parent provides enough scroll distance to enter, interact, and leave. */
+.mission-pin {
+  position: sticky; top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: var(--void);
+}
+.console {
+  position: absolute; inset: 0; z-index: 2;
+  height: 100%;
+  transform-origin: 50% 52%;
+  transform: translateY(calc((1 - var(--mission-enter)) * 10svh))
+    scale(calc(0.94 + var(--mission-enter) * 0.06 - var(--mission-exit) * 0.035));
+  opacity: calc(0.18 + var(--mission-enter) * 0.82 - var(--mission-exit) * 0.82);
+  filter: blur(calc((1 - var(--mission-enter)) * 7px + var(--mission-exit) * 7px));
+  transition: opacity 0.08s linear, transform 0.08s linear, filter 0.08s linear;
+}
 
 /* ---- Inside the mission ----
-   Held while the scene owns the viewport: the nav retracts, the grain
-   bites harder, and the starfield behind the page comes up to meet the
-   one the canvas is drawing. It all reverses the moment you scroll out. */
+   While the scene owns the viewport, the ordinary site chrome gets out of
+   the way and the surrounding void takes on the console's star field. */
 body.in-demo { --grain-fine: 0.26; --grain-coarse: 0.12; --stars: 0.72; }
 body.in-demo .sitebar { transform: translateY(-100%); opacity: 0; }
 .sitebar { transition: transform 0.55s var(--ease), opacity 0.4s var(--ease); }
 .grain { transition: opacity 0.7s var(--ease); }
 
-/* Section copy keeps the page's column even though the section does not. */
-.band-proof > .band-head,
-.band-proof > .console-note {
-  position: relative; z-index: 2;
-  max-width: 1180px; margin-inline: auto;
-  padding-inline: clamp(20px, 5vw, 64px);
+.mission-entry,
+.mission-exit {
+  position: absolute; z-index: 4;
+  left: clamp(24px, 7vw, 112px);
+  width: min(470px, calc(100vw - 48px));
+  pointer-events: none;
 }
-.band-proof > .band-head { padding-top: clamp(120px, 20vh, 240px); }
-.band-proof > .console-note { padding-bottom: clamp(220px, 30vh, 360px); }
+.mission-entry {
+  top: 50%; transform: translateY(calc(-50% - var(--mission-enter) * 34px));
+  opacity: calc(1 - var(--mission-enter) * 1.45);
+}
+.mission-exit {
+  bottom: clamp(54px, 11vh, 126px); transform: translateY(calc(28px - var(--mission-exit) * 28px));
+  opacity: var(--mission-exit);
+}
+.mission-entry .kicker,
+.mission-exit .kicker { margin-bottom: 16px; }
+.mission-entry-title,
+.mission-exit-title {
+  font-size: clamp(38px, 5.6vw, 72px); line-height: 0.98; color: var(--text-0);
+}
+.mission-entry > p:last-child,
+.mission-exit > p:last-child {
+  max-width: 38ch; margin-top: 18px;
+  font-size: 15px; line-height: 1.6; color: var(--text-2);
+}
 
-/* The mission is a screen, not a panel: it fills everything under the nav,
-   and `scroll-snap-stop: always` means a fast scroll cannot fling past it.
-   You arrive, and the page stops there until you scroll again. */
-.console {
-  position: relative; z-index: 2;
-  margin-top: clamp(40px, 7vh, 76px);
-  height: 100svh;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-}
-
-.console-note {
-  margin-top: 26px; max-width: 82ch;
-  font-size: 13px; line-height: 1.66; color: var(--text-3);
-}
-.console-note b { color: var(--text-1); font-weight: 500; }
-.console-note code {
-  font-family: var(--mono); font-size: 12px;
-  color: rgba(var(--accent-rgb), 0.9);
-  padding: 1px 6px; border-radius: 5px;
-  background: rgba(255,255,255,0.04);
+@media (prefers-reduced-motion: reduce) {
+  .console { transform: none; opacity: 1; filter: none; transition: none; }
+  .mission-entry, .mission-exit { display: none; }
 }
 
 /* ---- 04 scope ---- */

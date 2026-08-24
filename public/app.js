@@ -1428,15 +1428,26 @@ let lastFrame = 0;
 let onScreen = true;
 if (typeof IntersectionObserver === "function") {
   new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; }, { rootMargin: "120px" }).observe(STAGE);
-  /* Separately: once the scene actually owns the viewport, the page marks
-     itself as being inside the mission. The stylesheet does the rest —
-     retracting the nav and lifting the sky. Threshold, not a scroll
-     position, so it holds however the reader got here. */
-  new IntersectionObserver(
-    ([entry]) => document.body.classList.toggle("in-demo", entry.intersectionRatio >= 0.4),
-    { threshold: [0, 0.4, 0.8] },
-  ).observe(STAGE);
 }
+
+/* The mission chapter has a deliberately long scroll range. Its pinned frame
+   is a different space, not another card in the editorial page: the first
+   part of the range brings it in, the middle leaves it fully interactive, and
+   the last part returns the reader to the page below. */
+const MISSION_CHAPTER = el("live-proof");
+function updateMissionScroll() {
+  const rect = MISSION_CHAPTER.getBoundingClientRect();
+  const viewport = Math.max(1, innerHeight);
+  const travel = Math.max(1, rect.height - viewport);
+  const progress = Math.max(0, Math.min(1, -rect.top / travel));
+  const enter = Math.max(0, Math.min(1, progress / 0.18));
+  const exit = Math.max(0, Math.min(1, (progress - 0.82) / 0.18));
+
+  MISSION_CHAPTER.style.setProperty("--mission-enter", enter.toFixed(3));
+  MISSION_CHAPTER.style.setProperty("--mission-exit", exit.toFixed(3));
+  document.body.classList.toggle("in-demo", enter >= 0.92 && exit <= 0.08);
+}
+addEventListener("scroll", updateMissionScroll, { passive: true });
 
 function paintFrame(now) {
   const { w, h } = app.view;
@@ -1707,7 +1718,10 @@ el("observation").addEventListener("keydown", (event) => {
   if (event.key === "Enter" && !el("capture").disabled) el("capture").click();
 });
 
-addEventListener("resize", resizeCanvas);
+addEventListener("resize", () => {
+  resizeCanvas();
+  updateMissionScroll();
+});
 /* The stage resizes with the page around it, not only with the window. */
 if (typeof ResizeObserver === "function") new ResizeObserver(resizeCanvas).observe(STAGE);
 reduceMotion.addEventListener("change", () => {
@@ -1722,6 +1736,7 @@ if (HOSTED_GUIDED_DEMO) {
   el("observation-control").hidden = true;
 }
 resizeCanvas();
+updateMissionScroll();
 renderChrome();
 if (!reduceMotion.matches) requestAnimationFrame(loop);
 
