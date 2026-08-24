@@ -23,6 +23,12 @@ Changed does not mean false. It means the prior claim requires a re-read of the 
 
 ## Demo
 
+### Hosted guided demo
+
+The public Vercel showcase is a deterministic, per-browser-session walkthrough: it binds the fixed narrow claim to the Earth fixture, demonstrates the fingerprint mismatch after the controlled Moon fixture, and never contacts Claude-Mem or a local filesystem. It is intentionally labeled in the interface. The hosted walkthrough is a presentation of the verification behavior, not a live Claude-Mem retrieval.
+
+### Local integration demo
+
 ```sh
 npm install
 npm run dev

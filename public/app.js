@@ -31,6 +31,74 @@ const AMBER = [251, 191, 36];
 const GREEN = [52, 211, 153];
 const ORANGE = [251, 146, 60];
 
+/* Vercel serves this same client as a deliberately self-contained walkthrough.
+   Localhost always uses the real HTTP API, local source files and Claude-Mem
+   adapter. Nothing in hosted mode calls a local address or accepts a retrieval
+   identifier. */
+const HOSTED_GUIDED_DEMO = !["127.0.0.1", "localhost", "::1"].includes(location.hostname);
+const GUIDED_STORAGE_KEY = "sourcetether.guided-demo.v1";
+const GUIDED_TARGET = { projectRelativePath: "src/descent-model.ts", qualifiedName: "DescentModel.gravity" };
+const GUIDED_CLAIM = "DescentModel.gravity is a static property of class DescentModel initialized to the numeric literal 9.81.";
+const GUIDED_EARTH_DECLARATION = "static gravity = 9.81;";
+const GUIDED_LUNAR_DECLARATION = "static gravity = 1.62;";
+
+function guidedState() {
+  try { return JSON.parse(sessionStorage.getItem(GUIDED_STORAGE_KEY) ?? '{"captured":false,"calibration":"earth"}'); }
+  catch { return { captured: false, calibration: "earth" }; }
+}
+
+function saveGuidedState(next) { sessionStorage.setItem(GUIDED_STORAGE_KEY, JSON.stringify(next)); }
+
+function guidedLanding(controllerGravity) {
+  const state = { altitudeMeters: 40, verticalVelocityMetersPerSecond: -6, fuelUnits: 8 };
+  const trajectory = [{ timeSeconds: 0, thrust: 0, ...state }];
+  for (let step = 0, timeSeconds = 0; step < 10000; step += 1) {
+    const desired = Math.max(-3, Math.min(3, (-1.5 - state.verticalVelocityMetersPerSecond) * 2));
+    const requested = Math.max(0, Math.min(1, (controllerGravity + desired) / 12));
+    const thrust = Math.min(requested, state.fuelUnits / 0.1);
+    state.fuelUnits -= thrust * 0.1;
+    state.verticalVelocityMetersPerSecond += (thrust * 12 - 1.62) * 0.1;
+    state.altitudeMeters += state.verticalVelocityMetersPerSecond * 0.1;
+    timeSeconds += 0.1;
+    trajectory.push({ timeSeconds, thrust, ...state });
+    if (state.altitudeMeters <= 0) {
+      state.altitudeMeters = 0; trajectory.at(-1).altitudeMeters = 0;
+      const speed = Math.abs(state.verticalVelocityMetersPerSecond);
+      return { outcome: speed <= 2 ? "soft_landing" : speed <= 6 ? "hard_landing" : "crash", finalState: state, trajectory };
+    }
+    if (state.fuelUnits <= 0) { state.fuelUnits = 0; trajectory.at(-1).fuelUnits = 0; return { outcome: "fuel_depleted", finalState: state, trajectory }; }
+  }
+  throw new Error("guided_fixture_failed");
+}
+
+function guidedMission() {
+  const state = guidedState();
+  const lunar = state.calibration === "lunar";
+  const declarationText = lunar ? GUIDED_LUNAR_DECLARATION : GUIDED_EARTH_DECLARATION;
+  const source = {
+    declarationText, declarationKind: "class_static_property",
+    declarationSpan: { start: 0, end: declarationText.length },
+    currentFingerprint: lunar ? "guided-lunar…b7c2e1" : "guided-earth…9a81f0",
+    ...(state.captured ? { capturedFingerprint: "guided-earth…9a81f0", matchesCapturedAnchor: !lunar } : {}),
+  };
+  const provenance = { externalObservationId: "guided-fixture", boundAt: "deterministic fixture" };
+  const gate = !state.captured
+    ? { status: "withheld", reason: "capture_required", reread: GUIDED_TARGET }
+    : lunar
+      ? { status: "withheld", reason: "fingerprint_changed", reread: GUIDED_TARGET, provenance }
+      : { status: "released", claim: GUIDED_CLAIM, provenance };
+  return { calibration: state.calibration, target: GUIDED_TARGET, source, gate,
+    lander: { stale: guidedLanding(9.81), revalidated: guidedLanding(1.62) } };
+}
+
+async function guidedApi(path) {
+  const state = guidedState();
+  if (path === "/api/capture") saveGuidedState({ ...state, captured: true, calibration: "earth" });
+  else if (path === "/api/calibration") saveGuidedState({ ...state, calibration: "lunar" });
+  else if (path === "/api/reset") saveGuidedState({ captured: false, calibration: "earth" });
+  return guidedMission();
+}
+
 const OUTCOME_LABEL = {
   soft_landing: "Touchdown",
   hard_landing: "Hard landing",
@@ -70,6 +138,7 @@ function makeRng(seed) {
 /* ------------------------------------------------------------------- api */
 
 async function api(path, body) {
+  if (HOSTED_GUIDED_DEMO) return guidedApi(path, body);
   const init = body === undefined
     ? { method: "GET" }
     : { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) };
@@ -197,7 +266,7 @@ function renderChrome() {
   const memcard = el("memcard");
   memcard.hidden = provenance === null || phase === "boot";
   if (provenance !== null) {
-    el("memory-id").textContent = `claude-mem #${provenance.externalObservationId}`;
+    el("memory-id").textContent = HOSTED_GUIDED_DEMO ? "guided fixture" : `claude-mem #${provenance.externalObservationId}`;
     el("memory-state").textContent = stated === "earth" ? "verified" : "quarantined";
   }
 
@@ -1625,6 +1694,10 @@ reduceMotion.addEventListener("change", () => {
 });
 
 installRefraction();
+if (HOSTED_GUIDED_DEMO) {
+  el("hosted-note").hidden = false;
+  el("observation-control").hidden = true;
+}
 resizeCanvas();
 renderChrome();
 if (!reduceMotion.matches) requestAnimationFrame(loop);

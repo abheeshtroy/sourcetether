@@ -124,6 +124,10 @@ body[data-phase="lunar"], body[data-phase="replay"], body[data-phase="settled"] 
   box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.85);
 }
 .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+.hosted-note {
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.07em;
+  color: var(--text-3); text-transform: uppercase; white-space: nowrap;
+}
 
 /* Technical proof stays behind a disclosure so it never competes with the
    story; it opens as a panel, not as a card in the layout. */
