@@ -1428,6 +1428,14 @@ let lastFrame = 0;
 let onScreen = true;
 if (typeof IntersectionObserver === "function") {
   new IntersectionObserver(([entry]) => { onScreen = entry.isIntersecting; }, { rootMargin: "120px" }).observe(STAGE);
+  /* Separately: once the scene actually owns the viewport, the page marks
+     itself as being inside the mission. The stylesheet does the rest —
+     retracting the nav and lifting the sky. Threshold, not a scroll
+     position, so it holds however the reader got here. */
+  new IntersectionObserver(
+    ([entry]) => document.body.classList.toggle("in-demo", entry.intersectionRatio >= 0.4),
+    { threshold: [0, 0.4, 0.8] },
+  ).observe(STAGE);
 }
 
 function paintFrame(now) {

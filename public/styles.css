@@ -83,8 +83,9 @@
   --wash-3: rgba(96,165,250,0.06);
   --star: rgba(255,255,255,0.5);
   --chrome: rgba(8,8,18,0.72);
-  --grain-fine: 0.14;
-  --grain-coarse: 0.06;
+  --grain-fine: 0.20;
+  --grain-coarse: 0.09;
+  --stars: 0.42;
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -140,8 +141,9 @@
     --wash-3: rgba(251,191,36,0.10);
     --star: rgba(18,18,32,0.16);
     --chrome: rgba(246,245,241,0.78);
-    --grain-fine: 0.09;
-    --grain-coarse: 0.04;
+    --grain-fine: 0.13;
+    --grain-coarse: 0.055;
+    --stars: 0;
   }
 }
 
@@ -186,8 +188,9 @@
   --wash-3: rgba(251,191,36,0.10);
   --star: rgba(18,18,32,0.16);
   --chrome: rgba(246,245,241,0.78);
-  --grain-fine: 0.09;
-  --grain-coarse: 0.04;
+  --grain-fine: 0.13;
+  --grain-coarse: 0.055;
+  --stars: 0;
 }
 
 /* ---- The live-proof section is theme-proof ----
@@ -228,7 +231,12 @@
     inset 0 0 0 1px rgba(255,255,255,0.11);
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* Proximity, not mandatory: the editorial sections scroll normally and
+     only the mission screen claims a stop. */
+  scroll-snap-type: y proximity;
+}
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 body {
   background: var(--bg-0);
@@ -244,11 +252,22 @@ body {
 /* Ambient light on the page itself, so the long scroll between sections is
    a lit surface rather than a flat fill. Fixed, so it does not travel. */
 body::before {
-  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
   background:
     radial-gradient(ellipse 70% 50% at 18% 8%, var(--wash-1), transparent 62%),
     radial-gradient(ellipse 60% 46% at 84% 44%, var(--wash-2), transparent 64%),
     radial-gradient(ellipse 80% 50% at 50% 100%, var(--wash-3), transparent 68%);
+}
+
+/* The page sits in the same sky the mission does. One 900px tile of stars,
+   drawn once and repeated, at an opacity the light theme takes to zero. */
+body::after {
+  content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  opacity: var(--stars);
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='900' height='900' fill='white'><circle cx='291.4' cy='135.8' r='1.1' opacity='0.22'/><circle cx='739.1' cy='84.7' r='0.9' opacity='0.22'/><circle cx='456.7' cy='33.7' r='0.8' opacity='0.5'/><circle cx='216.6' cy='495.9' r='0.5' opacity='0.45'/><circle cx='111.4' cy='200.9' r='1.1' opacity='0.63'/><circle cx='55.7' cy='527.0' r='0.5' opacity='0.51'/><circle cx='41.9' cy='772.6' r='0.7' opacity='0.28'/><circle cx='486.6' cy='513.8' r='0.9' opacity='0.81'/><circle cx='162.7' cy='523.4' r='1.1' opacity='0.32'/><circle cx='87.7' cy='640.9' r='0.9' opacity='0.23'/><circle cx='185.4' cy='612.4' r='0.8' opacity='0.78'/><circle cx='419.0' cy='831.1' r='0.7' opacity='0.23'/><circle cx='714.9' cy='629.1' r='0.6' opacity='0.13'/><circle cx='270.2' cy='445.6' r='0.7' opacity='0.41'/><circle cx='259.1' cy='882.2' r='0.5' opacity='0.32'/><circle cx='148.5' cy='307.9' r='0.8' opacity='0.5'/><circle cx='865.8' cy='69.9' r='0.9' opacity='0.62'/><circle cx='787.9' cy='282.4' r='1.1' opacity='0.45'/><circle cx='447.0' cy='717.2' r='0.5' opacity='0.45'/><circle cx='850.2' cy='426.7' r='1.1' opacity='0.23'/><circle cx='658.0' cy='278.6' r='0.9' opacity='0.94'/><circle cx='739.7' cy='256.1' r='0.8' opacity='0.86'/><circle cx='312.3' cy='846.6' r='0.7' opacity='0.17'/><circle cx='105.4' cy='53.1' r='1.4' opacity='0.4'/><circle cx='664.5' cy='358.1' r='1.4' opacity='0.56'/><circle cx='149.7' cy='361.5' r='0.7' opacity='0.47'/><circle cx='737.4' cy='777.6' r='0.7' opacity='0.4'/><circle cx='887.8' cy='614.5' r='0.8' opacity='0.92'/><circle cx='135.8' cy='158.6' r='0.6' opacity='0.38'/><circle cx='10.9' cy='748.0' r='0.6' opacity='0.21'/><circle cx='3.7' cy='377.1' r='0.7' opacity='0.36'/><circle cx='286.8' cy='112.9' r='1.4' opacity='0.58'/><circle cx='555.8' cy='608.6' r='0.5' opacity='0.29'/><circle cx='783.9' cy='856.7' r='1.1' opacity='0.79'/><circle cx='353.1' cy='359.1' r='0.5' opacity='0.3'/><circle cx='360.4' cy='171.5' r='0.6' opacity='0.29'/><circle cx='98.9' cy='540.7' r='0.5' opacity='0.1'/><circle cx='136.1' cy='91.3' r='0.7' opacity='0.36'/><circle cx='63.3' cy='187.2' r='0.8' opacity='0.29'/><circle cx='227.0' cy='312.7' r='0.7' opacity='0.3'/><circle cx='103.8' cy='439.3' r='0.8' opacity='0.55'/><circle cx='280.7' cy='129.7' r='1.1' opacity='0.44'/><circle cx='238.3' cy='746.0' r='0.6' opacity='0.32'/><circle cx='184.7' cy='856.8' r='0.7' opacity='0.16'/><circle cx='488.9' cy='24.3' r='0.9' opacity='0.41'/><circle cx='578.6' cy='81.9' r='1.4' opacity='0.38'/></svg>");
+  background-size: 900px 900px;
+  background-repeat: repeat;
+  transition: opacity 0.9s var(--ease);
 }
 
 /* ---- Film grain ----
@@ -297,8 +316,8 @@ body[data-phase="settled"] .console {
    viewport. Everything inside it is unchanged. */
 
 .shell {
-  height: min(92svh, 900px);
-  min-height: 520px;
+  height: 100%;
+  min-height: 480px;
   display: grid;
   grid-template-rows: 48px 1fr 76px;
   position: relative;
@@ -1042,11 +1061,20 @@ body[data-phase="settled"] .narrative { transform: translateY(0); }
 .band-proof::before,
 .band-proof::after {
   content: ""; position: absolute; left: 0; right: 0;
-  height: clamp(140px, 20vh, 260px);
+  height: clamp(200px, 32vh, 420px);
   pointer-events: none; z-index: 1;
 }
 .band-proof::before { top: 0;    background: linear-gradient(180deg, var(--page-bg), var(--void)); }
 .band-proof::after  { bottom: 0; background: linear-gradient(180deg, var(--void), var(--page-bg)); }
+
+/* ---- Inside the mission ----
+   Held while the scene owns the viewport: the nav retracts, the grain
+   bites harder, and the starfield behind the page comes up to meet the
+   one the canvas is drawing. It all reverses the moment you scroll out. */
+body.in-demo { --grain-fine: 0.26; --grain-coarse: 0.12; --stars: 0.72; }
+body.in-demo .sitebar { transform: translateY(-100%); opacity: 0; }
+.sitebar { transition: transform 0.55s var(--ease), opacity 0.4s var(--ease); }
+.grain { transition: opacity 0.7s var(--ease); }
 
 /* Section copy keeps the page's column even though the section does not. */
 .band-proof > .band-head,
@@ -1058,7 +1086,16 @@ body[data-phase="settled"] .narrative { transform: translateY(0); }
 .band-proof > .band-head { padding-top: clamp(120px, 20vh, 240px); }
 .band-proof > .console-note { padding-bottom: clamp(220px, 30vh, 360px); }
 
-.console { position: relative; z-index: 2; margin-top: 44px; }
+/* The mission is a screen, not a panel: it fills everything under the nav,
+   and `scroll-snap-stop: always` means a fast scroll cannot fling past it.
+   You arrive, and the page stops there until you scroll again. */
+.console {
+  position: relative; z-index: 2;
+  margin-top: clamp(40px, 7vh, 76px);
+  height: 100svh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
 
 .console-note {
   margin-top: 26px; max-width: 82ch;
@@ -1134,8 +1171,9 @@ body[data-phase="settled"] .narrative { transform: translateY(0); }
   .scroll-cue { display: none; }
 
   /* Console at phone width: the overlays leave the canvas edges and stack
-     as a single column so nothing lands off-frame. */
-  .shell { height: auto; grid-template-rows: 44px 62svh auto; }
+     as a single column so nothing lands off-frame. The screen still fills
+     the viewport; the stage takes whatever the dock does not. */
+  .shell { height: 100%; grid-template-rows: 44px minmax(0, 1fr) auto; }
   .topbar { padding: 0 14px; gap: 10px; }
   .console-brand { font-size: 12px; }
   .ctx { font-size: 9px; }
