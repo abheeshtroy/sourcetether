@@ -1443,16 +1443,20 @@ function updateMissionScroll() {
   const travel = Math.max(1, rect.height - viewport);
   const progress = Math.max(0, Math.min(1, -rect.top / travel));
   const entry = scrollRange(progress, 0, 0.30);
-  const consoleIn = scrollRange(progress, 0.30, 0.40);
-  const consoleOut = scrollRange(progress, 0.64, 0.72);
-  const exit = scrollRange(progress, 0.78, 0.93);
+  const consoleIn = scrollRange(progress, 0.30, 0.41);
+  const consoleOut = scrollRange(progress, 0.63, 0.72);
+  const exit = scrollRange(progress, 0.76, 1.0);
 
   MISSION_CHAPTER.style.setProperty("--mission-entry", entry.toFixed(3));
   MISSION_CHAPTER.style.setProperty("--mission-console-in", consoleIn.toFixed(3));
   MISSION_CHAPTER.style.setProperty("--mission-console-out", consoleOut.toFixed(3));
   MISSION_CHAPTER.style.setProperty("--mission-exit", exit.toFixed(3));
   MISSION_CONSOLE.classList.toggle("is-interactive", consoleIn >= 0.995 && consoleOut <= 0.005);
-  document.body.classList.toggle("in-demo", consoleIn >= 0.92 && consoleOut <= 0.08);
+
+  /* The site chrome leaves as soon as the chapter owns the viewport, not when
+     the console arrives: the first gate is already another world, and a nav
+     bar sitting over it would say otherwise. */
+  document.body.classList.toggle("in-demo", progress > 0.015 && progress < 0.985);
 }
 addEventListener("scroll", updateMissionScroll, { passive: true });
 

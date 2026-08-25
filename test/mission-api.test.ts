@@ -106,7 +106,7 @@ test("mission web handler serves only the bundled browser entry points", async (
      about the demo and never feed the gate, so the invariant is asserted on the
      console subtree rather than on the whole document. */
   const consoleStart = served.body.indexOf('<div class="console">');
-  const consoleEnd = served.body.indexOf('<div class="mission-exit"');
+  const consoleEnd = served.body.indexOf('<div class="mission-gate mission-exit"');
   assert.ok(consoleStart > 0 && consoleEnd > consoleStart);
   const missionConsole = served.body.slice(consoleStart, consoleEnd);
   assert.match(missionConsole, /id="stage"/);

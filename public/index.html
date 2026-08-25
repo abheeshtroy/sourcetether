@@ -214,19 +214,68 @@
   <!-- ------------------------------------------------------- live proof -->
   <section class="mission-chapter" id="live-proof" aria-label="Interactive SourceTether mission walkthrough">
     <div class="mission-pin">
-      <div class="mission-entry" aria-hidden="true">
-        <div class="flight-scene flight-scene-entry">
-          <div class="flight-craft descent-craft">
-            <span class="craft-antenna"></span><span class="craft-window"></span>
-            <span class="craft-body"></span><span class="craft-leg craft-leg-l"></span><span class="craft-leg craft-leg-r"></span>
-            <span class="craft-engine"></span>
+      <div class="mission-gate mission-entry" aria-hidden="true">
+        <div class="gate-sky" aria-hidden="true">
+          <span class="gate-stars gate-stars-far"></span>
+          <span class="gate-stars gate-stars-near"></span>
+          <span class="gate-warp"></span>
+          <span class="gate-limb"></span>
+          <span class="gate-vignette"></span>
+        </div>
+
+        <div class="gate-stack">
+          <div class="gate-craft">
+            <svg class="lm" viewBox="0 0 200 212" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <g class="lm-legs">
+              <path class="lm-strut lm-strut-back" d="M 86 140 L 68 178"/>
+              <ellipse class="lm-pad lm-pad-back" cx="67" cy="180" rx="8" ry="2.6"/>
+              <path class="lm-strut lm-strut-back" d="M 114 140 L 132 178"/>
+              <ellipse class="lm-pad lm-pad-back" cx="133" cy="180" rx="8" ry="2.6"/>
+              <path class="lm-strut" d="M 62 138 L 30 186"/>
+              <path class="lm-strut" d="M 70 120 L 44 168"/>
+              <path class="lm-strut" d="M 30 186 L 44 168"/>
+              <ellipse class="lm-pad" cx="30" cy="188" rx="12" ry="3.6"/>
+              <path class="lm-strut" d="M 138 138 L 170 186"/>
+              <path class="lm-strut" d="M 130 120 L 156 168"/>
+              <path class="lm-strut" d="M 170 186 L 156 168"/>
+              <ellipse class="lm-pad" cx="170" cy="188" rx="12" ry="3.6"/>
+            </g>
+            <g class="lm-descent">
+              <path class="lm-foil" d="M 62 102 L 138 102 L 144 124 L 144 142 L 56 142 L 56 124 Z"/>
+              <path class="lm-line" d="M 58 112 H 142 M 57 122 H 143 M 56 132 H 144"/>
+              <path class="lm-line" d="M 78 103 V 141 M 122 103 V 141"/>
+            </g>
+            <g class="lm-ascent">
+              <path class="lm-hull" d="M 70 58 L 82 44 L 118 44 L 130 58 L 130 86 L 118 98 L 82 98 L 70 86 Z"/>
+              <path class="lm-line" d="M 71 76 H 129 M 82 45 V 97 M 118 45 V 97"/>
+              <path class="lm-hull-dark" d="M 92 36 L 108 36 L 108 44 L 92 44 Z"/>
+              <path class="lm-strut" d="M 100 36 V 25"/>
+              <circle class="lm-lamp" cx="100" cy="22" r="2.6"/>
+              <path class="lm-strut lm-strut-back" d="M 130 54 L 145 44"/>
+              <circle class="lm-dish" cx="147" cy="42" r="5.5"/>
+              <ellipse class="lm-glass" cx="100" cy="63" rx="13.5" ry="7.5"/>
+              <path class="lm-strut lm-strut-back" d="M 66 52 h 5 M 129 52 h 5 M 66 88 h 5 M 129 88 h 5"/>
+            </g>
+            <g class="lm-engine">
+              <path class="lm-bell" d="M 91 142 L 109 142 L 117 165 L 83 165 Z"/>
+              <ellipse class="lm-bell" cx="100" cy="165" rx="17" ry="4"/>
+            </g>
+            <g class="lm-plume">
+              <path class="lm-plume-outer" d="M 80 166 Q 100 254 120 166 Z"/>
+              <path class="lm-plume-mid"   d="M 87 166 Q 100 230 113 166 Z"/>
+              <path class="lm-plume-core"  d="M 93 166 Q 100 208 107 166 Z"/>
+            </g>
+          </svg>
           </div>
-          <div class="flight-copy">
-            <p class="kicker">SOURCE TETHER // FLIGHT SYSTEM</p>
-            <p class="display mission-entry-title">Begin descent.</p>
-            <p class="mission-copy">A memory is cleared only while its source still holds.</p>
-            <div class="descent-beacon" aria-hidden="true"><span></span><span></span><span></span></div>
-            <p class="mission-cue">SCROLL TO INITIALIZE</p>
+
+          <p class="gate-kicker">SourceTether &middot; flight system</p>
+          <p class="display gate-title">Begin descent.</p>
+          <p class="gate-copy">A memory is cleared only while its source still holds.</p>
+
+          <div class="gate-cue">
+            <span class="gate-beacon" aria-hidden="true"></span>
+            <span class="gate-chevrons" aria-hidden="true"><b></b><b></b><b></b></span>
+            <span class="gate-cue-text">Scroll to initialize</span>
           </div>
         </div>
       </div>
@@ -321,18 +370,49 @@
       </div>
       </div>
 
-      <div class="mission-exit" aria-hidden="true">
-        <div class="flight-scene flight-scene-exit">
-          <div class="flight-craft ascent-craft">
-            <span class="craft-antenna"></span><span class="craft-window"></span>
-            <span class="craft-body"></span><span class="craft-leg craft-leg-l"></span><span class="craft-leg craft-leg-r"></span>
-            <span class="craft-engine"></span>
+      <div class="mission-gate mission-exit" aria-hidden="true">
+        <div class="gate-sky" aria-hidden="true">
+          <span class="gate-stars gate-stars-far"></span>
+          <span class="gate-stars gate-stars-near"></span>
+          <span class="gate-warp"></span>
+          <span class="gate-limb"></span>
+          <span class="gate-vignette"></span>
+        </div>
+
+        <div class="gate-stack">
+          <div class="gate-craft">
+            <svg class="lm lm-module" viewBox="0 0 200 198" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <g class="lm-ascent">
+              <path class="lm-hull" d="M 70 64 L 82 50 L 118 50 L 130 64 L 130 96 L 118 110 L 82 110 L 70 96 Z"/>
+              <path class="lm-line" d="M 71 84 H 129 M 82 51 V 109 M 118 51 V 109"/>
+              <path class="lm-hull-dark" d="M 92 42 L 108 42 L 108 50 L 92 50 Z"/>
+              <path class="lm-strut" d="M 100 42 V 31"/>
+              <circle class="lm-lamp" cx="100" cy="28" r="2.6"/>
+              <path class="lm-strut lm-strut-back" d="M 130 60 L 145 50"/>
+              <circle class="lm-dish" cx="147" cy="48" r="5.5"/>
+              <ellipse class="lm-glass" cx="100" cy="70" rx="13.5" ry="7.5"/>
+              <path class="lm-strut lm-strut-back" d="M 66 58 h 5 M 129 58 h 5 M 66 100 h 5 M 129 100 h 5"/>
+            </g>
+            <g class="lm-engine">
+              <path class="lm-bell" d="M 90 110 L 110 110 L 118 134 L 82 134 Z"/>
+              <ellipse class="lm-bell" cx="100" cy="134" rx="18" ry="4.2"/>
+            </g>
+            <g class="lm-plume">
+              <path class="lm-plume-outer" d="M 82 135 Q 100 252 118 135 Z"/>
+              <path class="lm-plume-mid"   d="M 88 135 Q 100 236 112 135 Z"/>
+              <path class="lm-plume-core"  d="M 94 135 Q 100 214 106 135 Z"/>
+            </g>
+          </svg>
           </div>
-          <div class="flight-copy">
-            <p class="kicker">MISSION COMPLETE</p>
-            <p class="display mission-exit-title">Return with what changed.</p>
-            <p class="mission-copy">The old memory was not called false. It was held until its source could be read again.</p>
-            <p class="mission-cue">CONTINUE TO ROADMAP</p>
+
+          <p class="gate-kicker">Mission complete &middot; ascent</p>
+          <p class="display gate-title">Return with what changed.</p>
+          <p class="gate-copy">The old memory was not called false. It was held until its source could be read again.</p>
+
+          <div class="gate-cue">
+            <span class="gate-beacon" aria-hidden="true"></span>
+            <span class="gate-chevrons" aria-hidden="true"><b></b><b></b><b></b></span>
+            <span class="gate-cue-text">Scroll to continue</span>
           </div>
         </div>
       </div>
